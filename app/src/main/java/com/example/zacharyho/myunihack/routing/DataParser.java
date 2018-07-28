@@ -40,7 +40,7 @@ public class DataParser {
     }
 
     private static void readIntersections(DataSnapshot snapshot) {
-        intersections = new HashMap<>();
+        intersections = new HashMap();
 
         // Grab list of points from snapshot.
         Iterable<DataSnapshot> points = snapshot.child(MAP_KEY).child(POINTS_KEY).getChildren();
@@ -78,7 +78,7 @@ public class DataParser {
     }
 
     private static void readRoads(DataSnapshot snapshot) {
-        roads = new HashMap<>();
+        roads = new HashMap();
 
         // Grab list of roads from snapshot.
         Iterable<DataSnapshot> roadList = snapshot.child(MAP_KEY).child(ROADS_KEY).getChildren();

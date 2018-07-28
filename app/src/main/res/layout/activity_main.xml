@@ -6,20 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:enabled="false"
+        android:text="@string/start_navigating"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.mapbox.mapboxsdk.maps.MapView
             android:id="@+id/mapView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             mapbox:mapbox_cameraTargetLat="-37.800449"
             mapbox:mapbox_cameraTargetLng="144.963938"
-            mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
-            mapbox:mapbox_cameraZoom="11" >
+            mapbox:mapbox_cameraZoom="11"
+            mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets">
 
         </com.mapbox.mapboxsdk.maps.MapView>
 

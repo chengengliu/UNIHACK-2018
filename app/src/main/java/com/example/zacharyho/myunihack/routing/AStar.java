@@ -1,5 +1,9 @@
-package com.example.zacharyho.myunihack;
+package com.example.zacharyho.myunihack.routing;
 
+
+import com.example.zacharyho.myunihack.routing.helperobjects.Coordinate;
+import com.example.zacharyho.myunihack.routing.helperobjects.Intersection;
+import com.example.zacharyho.myunihack.routing.helperobjects.RoadInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +17,8 @@ public class AStar {
     private static final double HCOST_CONSTANT = 100;
     private static final double EARTH_RADIUS_M = 6371000;
 
+    private static Coordinate providedStartCoordinate;
+    private static Coordinate providedGoalCoordinate;
     private static Intersection start;
     private static Intersection goal;
 
@@ -28,8 +34,10 @@ public class AStar {
      * @param goal
      * @return
      */
-//    public static Coordinate[] getBestPath(Coordinate start, Coordinate goal) {
-    public static String[] getBestPath(Coordinate start, Coordinate goal) {
+    public static Coordinate[] getBestPath(Coordinate start, Coordinate goal) {
+//    public static String[] getBestPath(Coordinate start, Coordinate goal) {
+        AStar.providedStartCoordinate = start;
+        AStar.providedGoalCoordinate = goal;
         AStar.start = getClosestIntersection(start);
         AStar.goal = getClosestIntersection(goal);
 
@@ -112,41 +120,47 @@ public class AStar {
         return lowestIntersection;
     }
 
-//    /**
-//     * Given an ending coordinate, reconstructs the path from 'start' to it, returning the shortest path.
-//     * @param end is the ending coordinate.
-//     * @return a list of sequential coordinates leading from 'start' to 'end'.
-//     */
-//    private static Coordinate[] reconstructPath(Intersection end) {
-//        ArrayList<Coordinate> path = new ArrayList<>();
-//        path.add(AStar.goal.getCoordinate());
-//        Intersection current = goal;
-//        while (cameFrom.containsKey(current)) {
-//            current = cameFrom.get(current);
-//            path.add(current.getCoordinate());
-//        }
-//
-//        Collections.reverse(path);
-//        return path.toArray(new Coordinate[0]);
-//    }
-
-
-//     * Given an ending coordinate, reconstructs the path from 'start' to it, returning the shortest path.
-//     * @param end is the ending coordinate.
-//     * @return a list of sequential coordinates leading from 'start' to 'end'.
-//     */
-    private static String[] reconstructPath(Intersection end) {
-        ArrayList<String> path = new ArrayList<>();
-        path.add(AStar.goal.debugNum);
+    /**
+     * Given an ending coordinate, reconstructs the path from 'start' to it, returning the shortest path.
+     * @param goal is the ending coordinate.
+     * @return a list of sequential coordinates leading from 'start' to 'end'.
+     */
+    private static Coordinate[] reconstructPath(Intersection goal) {
+        ArrayList<Coordinate> path = new ArrayList<>();
+        path.add(AStar.providedGoalCoordinate);
+        path.add(AStar.goal.getCoordinate());
         Intersection current = goal;
         while (cameFrom.containsKey(current)) {
             current = cameFrom.get(current);
-            path.add(current.debugNum);
+            path.add(current.getCoordinate());
         }
 
+        path.add(AStar.providedStartCoordinate);
+
         Collections.reverse(path);
-        return path.toArray(new String[0]);
+        return path.toArray(new Coordinate[0]);
     }
+
+//    /**
+//     * Given an ending coordinate, reconstructs the path from 'start' to it, returning the shortest path.
+//     * @param goal is the ending coordinate.
+//     * @return a list of sequential coordinates leading from 'start' to 'end'.
+//     */
+//    private static String[] reconstructPath(Intersection goal) {
+//        ArrayList<String> path = new ArrayList<>();
+//        path.add("GOAL");
+//        path.add(AStar.goal.debugNum);
+//        Intersection current = goal;
+//        while (cameFrom.containsKey(current)) {
+//            current = cameFrom.get(current);
+//            path.add(current.debugNum);
+//        }
+//
+//        path.add("START");
+//
+//        Collections.reverse(path);
+//        return path.toArray(new String[0]);
+//    }
 
     /**
      * Generate our RoadID from two intersects
@@ -191,8 +205,8 @@ public class AStar {
         double dLon = degToRad(p2.getLongitude()-p1.getLongitude());
 
         double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.sin(dLon/2) * Math.sin(dLon/2) *
-                    Math.cos(degToRad(p1.getLatitude())) * Math.cos(degToRad(p2.getLatitude()));
+                Math.sin(dLon/2) * Math.sin(dLon/2) *
+                        Math.cos(degToRad(p1.getLatitude())) * Math.cos(degToRad(p2.getLatitude()));
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 

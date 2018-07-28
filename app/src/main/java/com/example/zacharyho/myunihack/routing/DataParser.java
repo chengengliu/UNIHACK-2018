@@ -1,7 +1,9 @@
-package com.example.zacharyho.myunihack;
+package com.example.zacharyho.myunihack.routing;
 
 import android.util.Log;
 
+import com.example.zacharyho.myunihack.routing.helperobjects.Intersection;
+import com.example.zacharyho.myunihack.routing.helperobjects.RoadInfo;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;

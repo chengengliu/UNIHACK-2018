@@ -1,4 +1,4 @@
-package com.example.zacharyho.myunihack;
+package com.example.zacharyho.myunihack.routing.helperobjects;
 
 /**
  * This represents a real coordinate.

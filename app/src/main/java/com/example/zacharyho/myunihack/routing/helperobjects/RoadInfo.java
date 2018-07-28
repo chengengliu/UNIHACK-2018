@@ -1,4 +1,4 @@
-package com.example.zacharyho.myunihack;
+package com.example.zacharyho.myunihack.routing.helperobjects;
 
 public class RoadInfo {
     public final float crime;

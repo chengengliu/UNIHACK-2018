@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.zacharyho.myunihack.routing.AStar;
+import com.example.zacharyho.myunihack.routing.DataParser;
+import com.example.zacharyho.myunihack.routing.helperobjects.Coordinate;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -73,14 +76,22 @@ public class HomeScreen extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataParser.readData(dataSnapshot);
-                String[] testPath = AStar.getBestPath(
-                        new Coordinate(-37.800449, 144.963938),
-                        new Coordinate(-37.802693, 144.973985)
-                );
+//                String[] testPath = AStar.getBestPath(
+////                        new Coordinate(-37.800449, 144.963938),
+////                        new Coordinate(-37.802693, 144.973985)
+//                        new Coordinate(-37.800, 144.963),
+//                        new Coordinate(-37.802, 144.973)
+//                );
+//
+//                for (String c : testPath) {
+//                    System.out.printf("Next: %s)\n", c);
+//                }
 
-                for (String c : testPath) {
-                    System.out.printf("Next: %s)\n", c);
-                }
+                Coordinate[] testPath = AStar.getBestPath(
+                        new Coordinate(-37.800, 144.963),
+                        new Coordinate(-37.802, 144.973)
+                );
+                Log.d("asd", "asd");
             }
 
             @Override

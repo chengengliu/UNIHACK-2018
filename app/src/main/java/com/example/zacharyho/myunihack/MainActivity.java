@@ -86,12 +86,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Launch Navigation UI
-                NavigationLauncherOptions options = NavigationLauncherOptions.builder().origin(originPosition)
-                        .destination(destinationPosition)
-                        .shouldSimulateRoute(true)
-                        .build();
-                NavigationLauncher.startNavigation(MainActivity.this, options);
+//                // Launch Navigation UI
+//                NavigationLauncherOptions options = NavigationLauncherOptions.builder().origin(originPosition)
+//                        .destination(destinationPosition)
+//                        .shouldSimulateRoute(true)
+//                        .build();
+//                NavigationLauncher.startNavigation(MainActivity.this, options);
+                // Server call for waypoints
+
+
+
+                // convert to list of geojson points
+
+                getRoute(originPosition, destinationPosition, waypoints);
             }
         });
     }
@@ -246,41 +253,80 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startButton.setBackgroundResource(R.color.colorPrimary);
     }
 
-    private void getRoute(com.mapbox.geojson.Point origin, com.mapbox.geojson.Point destination) {
-        NavigationRoute.builder()
+    private void getRoute(com.mapbox.geojson.Point origin, com.mapbox.geojson.Point destination, List<com.mapbox.geojson.Point> waypoints) {
+//        NavigationRoute.builder()
+//                .accessToken(Mapbox.getAccessToken())
+//                .origin(origin)
+//                .destination(destination)
+//                .profile(DirectionsCriteria.PROFILE_WALKING)
+//                .build()
+//                .getRoute(new Callback<DirectionsResponse>() {
+//                    @Override
+//                    public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+//                        if (response.body() == null) {
+//                            Log.e(TAG, "No routes found, check right user and access token");
+//                            return;
+//                        } else if (response.body().routes().size() == 0 ) {
+//                            Log.e(TAG, "No routes found");
+//                            return;
+//                        }
+//
+//                        DirectionsRoute currRoute = response.body().routes().get(0);
+//
+//                        if (navigationMapRoute != null) {
+//                            navigationMapRoute.removeRoute();
+//                        } else {
+//                            navigationMapRoute = new NavigationMapRoute(null, mapView, map);
+//
+//                        }
+//
+//                        navigationMapRoute.addRoute(currRoute);
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<DirectionsResponse> call, Throwable t) {
+//                        Log.e(TAG, "Error:" + t.getMessage());
+//                    }
+//                });
+        NavigationRoute.Builder builder = NavigationRoute.builder()
                 .accessToken(Mapbox.getAccessToken())
                 .origin(origin)
-                .destination(destination)
-                .profile(DirectionsCriteria.PROFILE_WALKING)
-                .build()
-                .getRoute(new Callback<DirectionsResponse>() {
-                    @Override
-                    public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                        if (response.body() == null) {
-                            Log.e(TAG, "No routes found, check right user and access token");
-                            return;
-                        } else if (response.body().routes().size() == 0 ) {
-                            Log.e(TAG, "No routes found");
-                            return;
-                        }
+                .destination(destination);
 
-                        DirectionsRoute currRoute = response.body().routes().get(0);
+        for (com.mapbox.geojson.Point waypoint : waypoints) {
+            builder.addWaypoint(waypoint);
+        }
 
-                        if (navigationMapRoute != null) {
-                            navigationMapRoute.removeRoute();
-                        } else {
-                            navigationMapRoute = new NavigationMapRoute(null, mapView, map);
+        builder.build()
+            .getRoute(new Callback<DirectionsResponse>() {
+                @Override
+                public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+                    if (response.body() == null) {
+                        Log.e(TAG, "No routes found, check right user and access token");
+                        return;
+                    } else if (response.body().routes().size() == 0 ) {
+                        Log.e(TAG, "No routes found");
+                        return;
+                    }
 
-                        }
+                    DirectionsRoute currRoute = response.body().routes().get(0);
 
-                        navigationMapRoute.addRoute(currRoute);
+                    if (navigationMapRoute != null) {
+                        navigationMapRoute.removeRoute();
+                    } else {
+                        navigationMapRoute = new NavigationMapRoute(null, mapView, map);
 
                     }
 
-                    @Override
-                    public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-                        Log.e(TAG, "Error:" + t.getMessage());
-                    }
-                });
+                    navigationMapRoute.addRoute(currRoute);
+
+                }
+
+                @Override
+                public void onFailure(Call<DirectionsResponse> call, Throwable t) {
+                    Log.e(TAG, "Error:" + t.getMessage());
+                }
+            });
     }
 }

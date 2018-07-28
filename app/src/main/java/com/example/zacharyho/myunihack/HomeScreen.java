@@ -22,7 +22,7 @@ import static android.content.ContentValues.TAG;
 
 
 public class HomeScreen extends AppCompatActivity {
-
+//
 //    private TextView mTextMessage;
 //    private TextView testMessage;
 //
@@ -104,7 +104,7 @@ public class HomeScreen extends AppCompatActivity {
 //
 //        FirebaseAdapter.myRef.addListenerForSingleValueEvent(postListener);
 //    }
-
+//
 
 
 

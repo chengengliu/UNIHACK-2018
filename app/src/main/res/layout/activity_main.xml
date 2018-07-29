@@ -36,13 +36,6 @@
             mapbox:mapbox_cameraZoom="11"
             mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets">
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="match_parent"
-                android:layout_height="132dp"
-                android:max="10"
-                android:progress="3" />
         </com.mapbox.mapboxsdk.maps.MapView>
 
     </RelativeLayout>

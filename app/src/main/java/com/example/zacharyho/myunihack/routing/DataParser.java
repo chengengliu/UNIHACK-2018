@@ -2,9 +2,11 @@ package com.example.zacharyho.myunihack.routing;
 
 import android.util.Log;
 
+import com.example.zacharyho.myunihack.routing.helperobjects.Coordinate;
 import com.example.zacharyho.myunihack.routing.helperobjects.Intersection;
 import com.example.zacharyho.myunihack.routing.helperobjects.RoadInfo;
 import com.google.firebase.database.DataSnapshot;
+import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +42,7 @@ public class DataParser {
     }
 
     private static void readIntersections(DataSnapshot snapshot) {
-        intersections = new HashMap<>();
+        intersections = new HashMap();
 
         // Grab list of points from snapshot.
         Iterable<DataSnapshot> points = snapshot.child(MAP_KEY).child(POINTS_KEY).getChildren();
@@ -78,7 +80,7 @@ public class DataParser {
     }
 
     private static void readRoads(DataSnapshot snapshot) {
-        roads = new HashMap<>();
+        roads = new HashMap();
 
         // Grab list of roads from snapshot.
         Iterable<DataSnapshot> roadList = snapshot.child(MAP_KEY).child(ROADS_KEY).getChildren();
@@ -102,4 +104,10 @@ public class DataParser {
         }
         Log.d("Finished:", "Reading roads");
     }
+
+    public static Point convertCoordToPoint(Coordinate coordinate) {
+        return Point.fromLngLat(coordinate.getLongitude(), coordinate.getLatitude());
+
+    }
+
 }

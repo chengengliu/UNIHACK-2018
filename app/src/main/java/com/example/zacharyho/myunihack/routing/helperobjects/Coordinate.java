@@ -20,4 +20,14 @@ public class Coordinate {
     public double getLongitude() {
         return longitude;
     }
+
+    public Coordinate(com.mapbox.geojson.Point point) {
+        this.latitude = point.latitude();
+        this.longitude = point.longitude();
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.getLongitude() + ", " +   this.getLatitude() + ")";
+    }
 }

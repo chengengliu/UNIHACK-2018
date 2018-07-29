@@ -13,7 +13,7 @@ import java.util.Map;
 public class AStar {
 
     /** Reasonable min/max for this scalar between 0 - 2000. **/
-    private static final double UNSAFETY_SCALAR = 1500;
+    private static final double UNSAFETY_SCALAR = 9999;
     private static final double HCOST_CONSTANT = 100;
     private static final double EARTH_RADIUS_M = 6371000;
 

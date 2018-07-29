@@ -56,7 +56,7 @@ import static android.content.ContentValues.TAG;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationEngineListener, PermissionsListener
-        , MapboxMap.OnMapClickListener{
+        , MapboxMap.OnMapClickListener {
 
     private MapView mapView;
     private MapboxMap map;
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker destinationMarker;
 
     private Button startButton;
+
     private NavigationMapRoute navigationMapRoute;
     private static final String TAG = "MainActivity";
 

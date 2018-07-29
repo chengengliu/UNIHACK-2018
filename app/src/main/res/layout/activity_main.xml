@@ -23,7 +23,9 @@
         xmlns:mapbox="http://schemas.android.com/apk/res-auto"
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="190dp"
+        tools:layout_editor_absoluteY="567dp">
 
         <com.mapbox.mapboxsdk.maps.MapView
             android:id="@+id/mapView"
@@ -34,6 +36,13 @@
             mapbox:mapbox_cameraZoom="11"
             mapbox:mapbox_styleUrl="@string/mapbox_style_mapbox_streets">
 
+            <SeekBar
+                android:id="@+id/seekBar"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="132dp"
+                android:max="10"
+                android:progress="3" />
         </com.mapbox.mapboxsdk.maps.MapView>
 
     </RelativeLayout>

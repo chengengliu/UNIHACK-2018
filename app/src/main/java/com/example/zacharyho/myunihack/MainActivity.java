@@ -45,6 +45,7 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -93,6 +94,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        .build();
 //                NavigationLauncher.startNavigation(MainActivity.this, options);
                 // Server call for waypoints
+
+
+
+                Coordinate[] map = AStar.getBestPath((new Coordinate(originPosition)), (new Coordinate(destinationPosition)));
+
+                ArrayList<com.mapbox.geojson.Point> waypoints = new ArrayList<>();
+
+                for (Coordinate coordinate : map) {
+                    Log.d("Debug", coordinate.toString());
+                    waypoints.add(DataParser.convertCoordToPoint(coordinate));
+                }
 
 
 
@@ -158,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             originLocation = location;
             setCameraPosition(location);
         }
+        else {
+            Log.d("Debug", "This is null");
+        }
 
     }
 
@@ -189,6 +204,41 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             locationLayerPlugin.onStart();
         }
         mapView.onStart();
+
+
+        ValueEventListener postListener = new ValueEventListener() {
+            //            Log.d("Listening", "Listening!");
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataParser.readData(dataSnapshot);
+//                String[] testPath = AStar.getBestPath(
+////                        new Coordinate(-37.800449, 144.963938),
+////                        new Coordinate(-37.802693, 144.973985)
+//                        new Coordinate(-37.800, 144.963),
+//                        new Coordinate(-37.802, 144.973)
+//                );
+//
+//                for (String c : testPath) {
+//                    System.out.printf("Next: %s)\n", c);
+//                }
+
+                Coordinate[] testPath = AStar.getBestPath(
+                        new Coordinate(-37.800, 144.963),
+                        new Coordinate(-37.802, 144.973)
+                );
+                Log.d("asd", "asd");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        FirebaseAdapter.myRef.addListenerForSingleValueEvent(postListener);
+
     }
 
     @Override
@@ -247,13 +297,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         destinationPosition = com.mapbox.geojson.Point.fromLngLat(point.getLongitude(), point.getLatitude());
         originPosition = com.mapbox.geojson.Point.fromLngLat(originLocation.getLongitude(), originLocation.getLatitude());
-        getRoute(originPosition, destinationPosition);
 
         startButton.setEnabled(true);
         startButton.setBackgroundResource(R.color.colorPrimary);
     }
 
-    private void getRoute(com.mapbox.geojson.Point origin, com.mapbox.geojson.Point destination, List<com.mapbox.geojson.Point> waypoints) {
+    private void getRoute(com.mapbox.geojson.Point origin, com.mapbox.geojson.Point destination, ArrayList<com.mapbox.geojson.Point> waypoints) {
 //        NavigationRoute.builder()
 //                .accessToken(Mapbox.getAccessToken())
 //                .origin(origin)
@@ -289,8 +338,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        Log.e(TAG, "Error:" + t.getMessage());
 //                    }
 //                });
-        NavigationRoute.Builder builder = NavigationRoute.builder()
+        NavigationRoute.Builder builder = NavigationRoute.builder(this)
                 .accessToken(Mapbox.getAccessToken())
+                .profile(DirectionsCriteria.PROFILE_WALKING)
                 .origin(origin)
                 .destination(destination);
 
@@ -298,10 +348,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             builder.addWaypoint(waypoint);
         }
 
+        Log.d("SizeOfWaypoint", ((Integer) waypoints.size()).toString());
+
         builder.build()
             .getRoute(new Callback<DirectionsResponse>() {
                 @Override
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+
                     if (response.body() == null) {
                         Log.e(TAG, "No routes found, check right user and access token");
                         return;

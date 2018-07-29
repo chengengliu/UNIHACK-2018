@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         };
 
-        FirebaseAdapter.myRef.addListenerForSingleValueEvent(postListener);
+        FirebaseAdapter.myRef.addValueEventListener(postListener);
 
     }
 

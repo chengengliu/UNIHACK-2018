@@ -13,9 +13,11 @@ import java.util.Map;
 public class AStar {
 
     /** Reasonable min/max for this scalar between 0 - 2000. **/
-    private static final double UNSAFETY_SCALAR = 1500;
+//    private static final double UNSAFETY_SCALAR = 1500;
     private static final double HCOST_CONSTANT = 100;
     private static final double EARTH_RADIUS_M = 6371000;
+
+    private static int dangerLevel = 1500;
 
     private static Coordinate providedStartCoordinate;
     private static Coordinate providedGoalCoordinate;
@@ -34,12 +36,13 @@ public class AStar {
      * @param goal
      * @return
      */
-    public static Coordinate[] getBestPath(Coordinate start, Coordinate goal) {
+    public static Coordinate[] getBestPath(Coordinate start, Coordinate goal, int dangerLevel) {
 //    public static String[] getBestPath(Coordinate start, Coordinate goal) {
         AStar.providedStartCoordinate = start;
         AStar.providedGoalCoordinate = goal;
         AStar.start = getClosestIntersection(start);
         AStar.goal = getClosestIntersection(goal);
+        AStar.dangerLevel = dangerLevel;
 
         // Initialize data structures.
         evaluatedNodes = new ArrayList<>();
@@ -93,7 +96,7 @@ public class AStar {
         RoadInfo roadInfo = DataParser.roads.get(generateRoadID(from, to));
 
         double dist = getDistanceAsMetres(from.getCoordinate(), to.getCoordinate());
-        return Math.max(dist + UNSAFETY_SCALAR * (roadInfo.crime + roadInfo.parks - roadInfo.safety - roadInfo.lights), 0);
+        return Math.max(dist + dangerLevel * (roadInfo.crime + roadInfo.parks - roadInfo.safety - roadInfo.lights), 0);
 
     }
 

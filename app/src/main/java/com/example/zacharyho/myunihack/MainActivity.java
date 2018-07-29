@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.zacharyho.myunihack.routing.AStar;
@@ -56,7 +57,7 @@ import static android.content.ContentValues.TAG;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationEngineListener, PermissionsListener
-        , MapboxMap.OnMapClickListener{
+        , MapboxMap.OnMapClickListener, SeekBar.OnSeekBarChangeListener {
 
     private MapView mapView;
     private MapboxMap map;
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker destinationMarker;
 
     private Button startButton;
+    private SeekBar dangerSlider;
+    private int progress = 0;
+
     private NavigationMapRoute navigationMapRoute;
     private static final String TAG = "MainActivity";
 
@@ -80,9 +84,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Mapbox.getInstance(this, getString(R.string.access_token));
         setContentView(R.layout.activity_main);
         mapView = (MapView) findViewById(R.id.mapView);
-        startButton = findViewById(R.id.startButton);
+        startButton = (Button) findViewById(R.id.startButton);
+        dangerSlider = (SeekBar) findViewById(R.id.seekBar);
         mapView.onCreate(saveInstanceState);
         mapView.getMapAsync(this);
+
+        dangerSlider.setMax(100000);
+        dangerSlider.setProgress(progress);
+
+        dangerSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                progress = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-                Coordinate[] map = AStar.getBestPath((new Coordinate(originPosition)), (new Coordinate(destinationPosition)));
+                Coordinate[] map = AStar.getBestPath((new Coordinate(originPosition)), (new Coordinate(destinationPosition)), dangerSlider.getProgress());
 
                 ArrayList<com.mapbox.geojson.Point> waypoints = new ArrayList<>();
 
@@ -221,11 +246,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                for (String c : testPath) {
 //                    System.out.printf("Next: %s)\n", c);
 //                }
-
-                Coordinate[] testPath = AStar.getBestPath(
-                        new Coordinate(-37.800, 144.963),
-                        new Coordinate(-37.802, 144.973)
-                );
+//
+//                Coordinate[] testPath = AStar.getBestPath(
+//                        new Coordinate(-37.800, 144.963),
+//                        new Coordinate(-37.802, 144.973)
+//
+//                );
                 Log.d("asd", "asd");
             }
 
@@ -381,5 +407,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.e(TAG, "Error:" + t.getMessage());
                 }
             });
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }
